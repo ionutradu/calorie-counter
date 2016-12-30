@@ -1,0 +1,246 @@
+<html><head>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <base href="http://bootstrapstudio.io/demo/" bs-system-element="" bs-hidden=""> 
+                <meta charset="utf-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Main page</title><link rel="stylesheet" href="./embed/bootstrap/default/bootstrap.min.css">
+            <style bs-system-element="">.custom-header{
+  background:#292c2f;
+  padding:20px 40px;
+  box-sizing:border-box;
+  border:0;
+  border-radius:0;
+}
+
+.custom-header a.navbar-brand.navbar-link{
+  color:#fff;
+  font:normal 28px Cookie, Arial, Helvetica, sans-serif;
+  line-height:0.5;
+  margin-right:40px;
+  background:#292c2f;
+}
+
+.custom-header a.navbar-brand.navbar-link span{
+  color:#bc40df;
+}
+
+.custom-header ul.nav.navbar-nav.links li a{
+  font:14px Arial, Helvetica, sans-serif;
+  opacity:0.9;
+  text-decoration:none;
+  color:#fff;
+  background:#292c2f;
+  border:0;
+}
+
+.custom-header ul.nav.navbar-nav li a:hover{
+  opacity:1;
+}
+
+.custom-header .badge{
+  position:absolute;
+  top:4px;
+  border-radius:2px;
+  font-size:11px;
+  color:#fff;
+  background-color:#2A6A92;
+  padding:2px 4px;
+  font-weight:normal;
+}
+
+.custom-header li.dropdown, .custom-header li.dropdown.open{
+  background:#3a3c3e;
+}
+
+.custom-header li.dropdown .dropdown-toggle{
+  border-radius:2px;
+  color:#fff;
+  padding:8px 14px;
+  background:#3a3c3e;
+  opacity:0.9;
+  border:0;
+  margin:0;
+}
+
+.custom-header li.dropdown .dropdown-toggle:focus, .custom-header li.dropdown .dropdown-toggle:hover, .custom-header li.dropdown .dropdown-toggle:active{
+  background:#3a3c3e;
+  color:#fff;
+}
+
+.custom-header ul.nav.navbar-nav.navbar-right .dropdown li a{
+  font:bold 13px Arial, Helvetica, sans-serif;
+}
+
+img.dropdown-image{
+  border-radius:50%;
+  width:32px;
+  margin-left:10px;
+}
+
+.custom-header .dropdown ul{
+  background-color:#3a3c3e;
+  border:0;
+  min-width:140px;
+}
+
+.custom-header .dropdown ul li{
+  background-color:#3a3c3e;
+  padding:7px;
+  text-align:center;
+}
+
+.custom-header .dropdown ul li a{
+  background:#3a3c3e;
+  border-radius:2px;
+  color:#fff;
+  padding:0;
+}
+
+.custom-header .dropdown ul li a:active, .custom-header .dropdown ul li a:focus, .custom-header .dropdown ul li a:hover{
+  background:#3a3c3e;
+}
+
+.custom-header .dropdown ul li.active a{
+  color:#e9ac09 !important;
+}
+
+#devices {
+    overflow: scroll;
+    height: 5000px; 
+    margin-bottom: 50px;
+    position: left;
+    width: 30%;
+}
+
+.pre-scrollable {
+    max-height: 1000px;
+}
+
+</style>
+<style bs-system-element="" bs-hidden=""></style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Cookie">
+</head>
+<body>
+   <nav class="navbar navbar-default custom-header">
+      <div class="container-fluid">
+         <div class="navbar-header">
+            <a href="#" class="navbar-brand navbar-link">
+               <inline-character class="space"> </inline-character>
+            </a>
+         </div>
+         <div class="collapse navbar-collapse" id="navbar-collapse">
+            <ul class="nav navbar-nav links">
+               <li id="history" role="presentation">
+                  <a>
+                     <inline-character>Home</inline-character>
+                  </a>
+               </li>
+               <li role="presentation">
+                  <a href="#" class="hidden">
+                     <inline-character class="space"> </inline-character>
+                  </a>
+               </li>
+               <li role="presentation">
+                  <a href="#" class="hidden custom-navbar">
+                     <inline-character class="space"> </inline-character>
+                  </a>
+               </li>
+            </ul>
+         </div>
+      </div>
+   </nav>
+   
+    <br>
+
+    <div id="page" style="width: 100%">
+      <div id="left1" align="left" style="width: 20%; float:left">
+        <form id="person">
+          <label for="weight">Weight</label>
+          <input type="text" name="weight" id="weight" value="0"><br>
+          <label for="age">Age</label>
+          <input type="text" name="age" id="age" value="0"><br>
+          <label for="male">Male</label>
+          <input type="radio" name="gender" id="male" value="male">
+          <label for="female">Female</label>
+          <input type="radio" name="gender" id="female" value="female"><br>
+          <label for="code">Code</label>
+          <input type="text" name="code" id="code" value="" required><br>
+        </form>
+
+        Devices: <br>
+
+        <div id="devices" class="pre-scrollable" align="left" style="width: 70%"></div>
+      </div>
+
+      <div id="right" align="left" style="width: 80%; float:right"> <div id="asd"> asd </div> </div>
+      <br style="clear:both;"/> 
+    </div>
+</body>
+
+<script>
+    var name = "first smartwatch"
+    console.log(name)
+
+    $("#devices").html("<div id=" + name + " onclick=\"clicked(" + name + ")\"><pre><font color=black>" + name + "</font></pre></div>")
+
+    console.log(name)
+
+    function clicked(obj) {
+      var isValid = validateForm()
+
+      if (!isValid) {
+        return;
+      }
+
+      console.log(obj.innerText)
+    }
+
+    function validateForm() {
+        var age = document.forms["person"]["age"].value;
+        var gender = document.forms["person"]["gender"].value;
+        var weight = document.forms["person"]["weight"].value;
+        var code = document.forms["person"]["code"].value;
+
+        var valid = false;
+        var checked = false;
+
+        if (!isNaN(age) && age > 0 && !isNaN(weight) && weight > 0 && code != null && code.length > 0) {
+            valid = true;
+        }
+
+        var radios = document.getElementsByName('gender')
+
+        for (var i = 0; i < radios.length; i++) {
+            if (radios[i].checked) {
+              checked = true;
+            }
+        };
+
+        if (!valid || !checked) {
+          if (isNaN(weight) || weight < 1) {
+            alert("Weight not valid");
+            return false;
+          }
+
+          if (isNaN(age) || age < 1) {
+            alert("Age not valid");
+            return false;
+          }
+          
+          if (!checked) {
+            alert("Gender not selected");
+            return false;
+          }
+
+          if (code == null || (code != null && code.length == 0)) {
+            alert("Code not valid");
+            return false;
+          }
+        }
+
+        return valid && checked;
+    }
+</script>
+
+</html>
