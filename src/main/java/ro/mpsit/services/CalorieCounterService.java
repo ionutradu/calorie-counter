@@ -22,8 +22,6 @@ public class CalorieCounterService {
         person.setMale(true);
         person.setStartExerciseDate(System.currentTimeMillis());
 
-        Thread.sleep(60000);
-
         System.out.println(getExerciseTimeInHours(person.getStartExerciseDate()));
     }
 
@@ -62,6 +60,6 @@ public class CalorieCounterService {
     }
 
     private double getExerciseTimeInHours(Long startExerciseDate) {
-        return (System.currentTimeMillis() - startExerciseDate) / HOUR_IN_MS;
+        return (System.currentTimeMillis() - startExerciseDate) * 1.0 / HOUR_IN_MS * 1.0;
     }
 }
