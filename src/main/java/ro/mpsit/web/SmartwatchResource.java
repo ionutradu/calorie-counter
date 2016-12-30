@@ -57,7 +57,18 @@ public class SmartwatchResource {
             return ResponseEntity.badRequest().body("Device not registered.");
         }
 
-        calorieCounterService.startCounter(name, age, weight, isMale);
+        calorieCounterService.startExercise(name, age, weight, isMale);
+
+        return new ResponseEntity<>("ok", HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/stop", method = GET, produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> stop(@RequestParam String name) {
+        if (!smartwatchService.isPaired(name)) {
+            return ResponseEntity.badRequest().body("Device not registered.");
+        }
+
+        calorieCounterService.stopExercise(name);
 
         return new ResponseEntity<>("ok", HttpStatus.OK);
     }

@@ -22,10 +22,17 @@ public class CalorieCounterService {
         person.setMale(true);
         person.setStartExerciseDate(System.currentTimeMillis());
 
-        System.out.println(getExerciseTimeInHours(person.getStartExerciseDate()));
+        currentActivities.put("test", person);
+
+        int heartRate = 80;
+        while (true) {
+            System.out.println(getCalories("test", heartRate));
+            Thread.sleep(5000);
+        }
+
     }
 
-    public void startCounter(String name, Integer age, Integer weight, Boolean isMale) {
+    public void startExercise(String name, Integer age, Integer weight, Boolean isMale) {
         Person person = new Person();
         person.setAge(age);
         person.setWeight(weight);
@@ -33,6 +40,10 @@ public class CalorieCounterService {
         person.setStartExerciseDate(System.currentTimeMillis());
 
         currentActivities.put(name, person);
+    }
+
+    public void stopExercise(String name) {
+        currentActivities.remove(name);
     }
 
     public Double getCalories(String name, Integer heartRate) {
