@@ -51,13 +51,15 @@ public class SmartwatchResource {
     public ResponseEntity<String> start(@RequestParam String name,
                                         @RequestParam Integer age,
                                         @RequestParam Integer weight,
-                                        @RequestParam Boolean isMale
+                                        @RequestParam Boolean isMale,
+                                        @RequestParam Integer exerciseDuration
                                         ) {
         if (!smartwatchService.isPaired(name)) {
             return ResponseEntity.badRequest().body("Device not registered.");
         }
 
-        calorieCounterService.startExercise(name, age, weight, isMale);
+        calorieCounterService.startExercise(name, age, weight, isMale, exerciseDuration);
+        smartwatchService.startExercise(name);
 
         return new ResponseEntity<>("ok", HttpStatus.OK);
     }
@@ -71,6 +73,32 @@ public class SmartwatchResource {
         calorieCounterService.stopExercise(name);
 
         return new ResponseEntity<>("ok", HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/updateCalories", method = GET, produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> updateCalories(@RequestParam String name, @RequestParam Integer heartRate) {
+        if (!smartwatchService.isPaired(name)) {
+            return ResponseEntity.badRequest().body("Device not registered.");
+        }
+
+        Double calories = calorieCounterService.updateCalories(name, heartRate);
+
+        return new ResponseEntity<>(String.valueOf(calories), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/calories", method = GET, produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<ExerciseInformation> calories(@RequestParam String name) {
+        ExerciseInformation exerciseInformation = new ExerciseInformation();
+
+        if (!smartwatchService.isPaired(name)) {
+            return ResponseEntity.badRequest().body(exerciseInformation);
+        }
+
+        exerciseInformation = calorieCounterService.getInformation(name);
+
+        System.out.println(name + ": " + exerciseInformation.getCalories() + " " + exerciseInformation.getExercisePercentage());
+
+        return new ResponseEntity<>(exerciseInformation, HttpStatus.OK);
     }
 
     @RequestMapping(method = GET, produces = APPLICATION_JSON_VALUE)

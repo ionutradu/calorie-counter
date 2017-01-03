@@ -1,8 +1,8 @@
 package ro.mpsit.services;
 
 import org.springframework.stereotype.Service;
+import ro.mpsit.web.ExerciseInformation;
 
-import javax.annotation.PostConstruct;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -14,7 +14,7 @@ public class CalorieCounterService {
     private static final int HOUR_IN_MS = 60 * 60 * 1000;
 
 
-    @PostConstruct
+//    @PostConstruct
     public void init() throws InterruptedException {
         Person person = new Person();
         person.setAge(23);
@@ -26,18 +26,20 @@ public class CalorieCounterService {
 
         int heartRate = 80;
         while (true) {
-            System.out.println(getCalories("test", heartRate));
+            System.out.println(updateCalories("test", heartRate));
             Thread.sleep(5000);
         }
 
     }
 
-    public void startExercise(String name, Integer age, Integer weight, Boolean isMale) {
+    public void startExercise(String name, Integer age, Integer weight, Boolean isMale, Integer exerciseDurationInMinutes) {
         Person person = new Person();
         person.setAge(age);
         person.setWeight(weight);
         person.setMale(isMale);
         person.setStartExerciseDate(System.currentTimeMillis());
+        person.setCalories(0.0);
+        person.setExerciseDurationInMs(exerciseDurationInMinutes * 60 * 1000L);
 
         currentActivities.put(name, person);
     }
@@ -46,18 +48,45 @@ public class CalorieCounterService {
         currentActivities.remove(name);
     }
 
-    public Double getCalories(String name, Integer heartRate) {
+    public Double updateCalories(String name, Integer heartRate) {
         if (!currentActivities.containsKey(name)) {
             return null;
         }
 
         Person person = currentActivities.get(name);
 
+        Double calories = null;
+
         if (person.getMale()) {
-            return getMaleCalories(heartRate, person);
+            calories = getMaleCalories(heartRate, person);
+        } else {
+            calories = getFemaleCalories(heartRate, person);
         }
 
-        return getFemaleCalories(heartRate, person);
+        person.setCalories(calories);
+
+        currentActivities.put(name, person);
+
+        return calories;
+    }
+
+    public ExerciseInformation getInformation(String name) {
+        if (!currentActivities.containsKey(name)) {
+            return null;
+        }
+
+        Person person = currentActivities.get(name);
+
+        ExerciseInformation exerciseInformation = new ExerciseInformation();
+        exerciseInformation.setCalories(String.valueOf(person.getCalories() + 2.0));
+        exerciseInformation.setExercisePercentage(getPercentage(person));
+        return exerciseInformation;
+    }
+
+    private String getPercentage(Person person) {
+        double exerciseTimeInMs = (System.currentTimeMillis() - person.getStartExerciseDate()) * 1.0;
+        double percentage = exerciseTimeInMs / person.getExerciseDurationInMs();
+        return String.valueOf((percentage * 10000 / 100));
     }
 
     private Double getMaleCalories(Integer heartRate, Person person) {

@@ -21,7 +21,9 @@ public class SmartwatchService {
 
     private RestTemplate restTemplate = new RestTemplate();
 
-    private static final String SMARTWATCH_BASE_URL = "http://localhost:%d/api/pair";
+    private static final String SMARTWATCH_START_URL = "http://localhost:%d/api/start";
+    private static final String SMARTWATCH_STOP_URL = "http://localhost:%d/api/stop";
+    private static final String SMARTWATCH_PAIR_URL = "http://localhost:%d/api/pair";
 
     public void ping(String name, Integer port) {
         waitingList.put(name, port);
@@ -48,8 +50,23 @@ public class SmartwatchService {
         return pairedWatches.containsKey(name);
     }
 
+    public void startExercise(String name) {
+        String deviceUri = String.format(SMARTWATCH_START_URL, pairedWatches.get(name));
+
+        URI uri = UriComponentsBuilder.fromHttpUrl(deviceUri)
+                .build().encode().toUri();
+
+        System.out.println("Requesting starting to " + uri.toString());
+
+        try {
+            restTemplate.getForEntity(uri, String.class);
+        } catch (HttpServerErrorException | HttpClientErrorException e) {
+            System.out.println("Couldn't start. " + e.getMessage());
+        }
+    }
+
     private String requestPairing(String name, String code) {
-        String deviceUri = String.format(SMARTWATCH_BASE_URL, waitingList.get(name));
+        String deviceUri = String.format(SMARTWATCH_PAIR_URL, waitingList.get(name));
 
         URI uri = UriComponentsBuilder.fromHttpUrl(deviceUri)
                 .queryParam("code", code)
