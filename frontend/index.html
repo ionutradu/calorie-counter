@@ -122,6 +122,11 @@ img.dropdown-image{
     width: 30%;
 }
 
+.gauge {
+    width: 320px;
+    height: 240px;
+}
+
 .pre-scrollable {
     max-height: 1000px;
 }
@@ -166,9 +171,11 @@ img.dropdown-image{
       <div id="left1" align="left" style="width: 20%; float:left">
         <form id="person">
           <label for="weight">Weight</label>
-          <input type="text" name="weight" id="weight" value="1"><br>
+          <input type="text" name="weight" id="weight" value="65"><br>
           <label for="age">Age</label>
-          <input type="text" name="age" id="age" value="1"><br>
+          <input type="text" name="age" id="age" value="25"><br>
+          <label for="exerciseDuration">Exercise duration in minutes</label>
+          <input type="text" name="exerciseDuration" id="exerciseDuration" value="5"><br>
           <label for="male">Male</label>
           <input type="radio" name="gender" id="male" value="male" checked="checked">
           <label for="female">Female</label>
@@ -186,7 +193,8 @@ img.dropdown-image{
         <div> <button id="pair" onclick="pair()"/> Pair </div>
         <div> <button id="start" onclick="start()"/> Start </div>
         <div> <button id="stop" onclick="stop()"/> Stop </div>
-        <div id="time"></div>
+        <div id="calories" class="gauge"></div>
+        <div id="time" class="gauge"></div>
       </div>
       <br style="clear:both;"/> 
     </div>
@@ -205,7 +213,9 @@ img.dropdown-image{
 
     var devices = ""
 
-    var age, gender, weight, code;
+    var age, gender, weight, code, exerciseDuration;
+
+    var interval;
 
     names.forEach(function(entry) {
       devices += "<div id=" + entry + " onclick=\"clicked(" + entry + ")\"><pre><font color=black>" + entry + "</pre></font></div>"
@@ -229,46 +239,46 @@ img.dropdown-image{
     }
 
     function show_widgets() {
+        calories = new JustGage({
+            id: "calories",
+            value: 0,
+            min: 0,
+            max: 2000,
+            gaugeWidthScale: 0.2,
+            counter: true,
+            hideInnerShadow: true,
+            title: "Calories"
+        });
+
         time = new JustGage({
             id: "time",
             value: 0,
             min: 0,
-            max: 2000,
-            gaugeWidthScale: 0.4,
+            max: 100,
+            symbol: '%',
+            donut: true,
+            gaugeWidthScale: 0.2,
             counter: true,
             hideInnerShadow: true,
             title: "Sport time"
         });
 
-        setInterval(update_widgets(), 500)
+        interval = setInterval(update_widgets, 1000)
     }
 
     function update_widgets() {
-      var url = server_url.concat("/pair?")
-                .concat("name=")
-                .concat(selected.id)
-                .concat("&")
-                .concat("code=")
-                .concat(document.forms["person"]["code"].value);
+      var url = server_url.concat("/calories?")
+                .concat("name=").concat(selected.id);
 
       console.log(url)
 
       $.get(url, function(data, status, xhr) {
           console.log(data)
-
-          if (data.localeCompare("ok") == 0) {
-              // warn
-              console.log("Successful pairing")
-              $("#pair").hide()
-
-              show_widgets()
-
-          } else {
-              console.log(data)
-          }
-      }, "text");
-      time.refresh(500);
-
+          console.log("cal:" + data["calories"])
+          console.log("dur: " + data["exercisePercentage"])
+          time.refresh(data["exercisePercentage"]);
+          calories.refresh(data["calories"]);
+      }, "json");
     }
 
     function pair() {
@@ -291,9 +301,6 @@ img.dropdown-image{
                 // warn
                 console.log("Successful pairing")
                 $("#pair").hide()
-
-                show_widgets()
-
             } else {
                 console.log(data)
             }
@@ -309,7 +316,8 @@ img.dropdown-image{
                   .concat("name=").concat(selected.id)
                   .concat("&age=").concat(age)
                   .concat("&isMale=").concat($("#male").is(":checked"))
-                  .concat("&weight=").concat(weight);
+                  .concat("&weight=").concat(weight)
+                  .concat("&exerciseDuration=").concat(exerciseDuration);
 
         console.log(url)
 
@@ -332,7 +340,7 @@ img.dropdown-image{
 
     function stop() {
       if (selected) {
-        console.log("Pairing " + selected.id)
+        console.log("Stopping " + selected.id)
 
         var url = server_url.concat("/stop?")
                   .concat("name=")
@@ -346,10 +354,7 @@ img.dropdown-image{
             if (data.localeCompare("ok") == 0) {
                 // warn
                 console.log("Successful stopping")
-                $("#pair").hide()
-
-                show_widgets()
-
+                clearInterval(interval)
             } else {
                 console.log(data)
             }
@@ -368,6 +373,7 @@ img.dropdown-image{
       gender = document.forms["person"]["gender"].value;
       weight = document.forms["person"]["weight"].value;
       code = document.forms["person"]["code"].value;
+      exerciseDuration = document.forms["person"]["exerciseDuration"].value;
 
       changeColorToSelected(obj)
     }
@@ -377,11 +383,12 @@ img.dropdown-image{
         var gender = document.forms["person"]["gender"].value;
         var weight = document.forms["person"]["weight"].value;
         var code = document.forms["person"]["code"].value;
+        var exerciseDuration = document.forms["person"]["exerciseDuration"].value;
 
         var valid = false;
         var checked = false;
 
-        if (!isNaN(age) && age > 0 && !isNaN(weight) && weight > 0 && code != null && code.length > 0) {
+        if (!isNaN(age) && age > 0 && !isNaN(weight) && weight > 0 && code != null && code.length > 0 && !isNaN(exerciseDuration) && exerciseDuration > 0) {
             valid = true;
         }
 
