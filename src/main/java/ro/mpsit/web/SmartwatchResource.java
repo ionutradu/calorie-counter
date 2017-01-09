@@ -71,12 +71,13 @@ public class SmartwatchResource {
         }
 
         calorieCounterService.stopExercise(name);
+        smartwatchService.stopExercise(name);
 
         return new ResponseEntity<>("ok", HttpStatus.OK);
     }
 
     @RequestMapping(value = "/updateCalories", method = GET, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> updateCalories(@RequestParam String name, @RequestParam Integer heartRate) {
+    public ResponseEntity<String> updateCalories(@RequestParam String name, @RequestParam Double heartRate) {
         if (!smartwatchService.isPaired(name)) {
             return ResponseEntity.badRequest().body("Device not registered.");
         }
@@ -96,7 +97,7 @@ public class SmartwatchResource {
 
         exerciseInformation = calorieCounterService.getInformation(name);
 
-        System.out.println(name + ": " + exerciseInformation.getCalories() + " " + exerciseInformation.getExercisePercentage());
+        System.out.println(name + ": " + exerciseInformation.getCalories() + " " + exerciseInformation.getExercisePercentage() + " " + exerciseInformation.getHeartRate());
 
         return new ResponseEntity<>(exerciseInformation, HttpStatus.OK);
     }
@@ -104,6 +105,12 @@ public class SmartwatchResource {
     @RequestMapping(method = GET, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<List<String>> getPairedWatches() {
         List<String> pairedWatches = smartwatchService.getPaired();
+        return new ResponseEntity<>(pairedWatches, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/waiting", method = GET, produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<String>> getUnpairedWatches() {
+        List<String> pairedWatches = smartwatchService.getWaitingWatches();
         return new ResponseEntity<>(pairedWatches, HttpStatus.OK);
     }
 }

@@ -4,6 +4,7 @@ public class ExerciseInformation {
 
     private String calories;
     private String exercisePercentage;
+    private String heartRate;
 
     public String getCalories() {
         return calories;
@@ -19,5 +20,13 @@ public class ExerciseInformation {
 
     public void setExercisePercentage(String exercisePercentage) {
         this.exercisePercentage = exercisePercentage;
+    }
+
+    public String getHeartRate() {
+        return heartRate;
+    }
+
+    public void setHeartRate(String heartRate) {
+        this.heartRate = heartRate;
     }
 }

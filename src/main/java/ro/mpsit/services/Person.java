@@ -8,6 +8,7 @@ public class Person {
     private Boolean male;
     private Double calories;
     private Long exerciseDurationInMs;
+    private Double heartRate;
 
     public Integer getWeight() {
         return weight;
@@ -57,4 +58,11 @@ public class Person {
         this.exerciseDurationInMs = exerciseDurationInMs;
     }
 
+    public void setHeartRate(Double heartRate) {
+        this.heartRate = heartRate;
+    }
+
+    public Double getHeartRate() {
+        return heartRate;
+    }
 }

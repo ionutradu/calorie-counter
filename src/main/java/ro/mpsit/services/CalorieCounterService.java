@@ -26,7 +26,7 @@ public class CalorieCounterService {
 
         int heartRate = 80;
         while (true) {
-            System.out.println(updateCalories("test", heartRate));
+            System.out.println(updateCalories("test", heartRate * 1.0));
             Thread.sleep(5000);
         }
 
@@ -48,7 +48,7 @@ public class CalorieCounterService {
         currentActivities.remove(name);
     }
 
-    public Double updateCalories(String name, Integer heartRate) {
+    public Double updateCalories(String name, Double heartRate) {
         if (!currentActivities.containsKey(name)) {
             return null;
         }
@@ -64,6 +64,7 @@ public class CalorieCounterService {
         }
 
         person.setCalories(calories);
+        person.setHeartRate(heartRate);
 
         currentActivities.put(name, person);
 
@@ -80,6 +81,8 @@ public class CalorieCounterService {
         ExerciseInformation exerciseInformation = new ExerciseInformation();
         exerciseInformation.setCalories(String.valueOf(person.getCalories() + 2.0));
         exerciseInformation.setExercisePercentage(getPercentage(person));
+        exerciseInformation.setHeartRate(String.valueOf(person.getHeartRate()));
+
         return exerciseInformation;
     }
 
@@ -89,12 +92,12 @@ public class CalorieCounterService {
         return String.valueOf((percentage * 10000 / 100));
     }
 
-    private Double getMaleCalories(Integer heartRate, Person person) {
+    private Double getMaleCalories(Double heartRate, Person person) {
         return ((-55.0969 + (0.6309 * heartRate) + (0.1988 * person.getWeight()) + (0.2017 * person.getAge())) / 4.184) * 60 *
                 getExerciseTimeInHours(person.getStartExerciseDate());
     }
 
-    private Double getFemaleCalories(Integer heartRate, Person person) {
+    private Double getFemaleCalories(Double heartRate, Person person) {
         return ((-20.4022 + (0.4472 * heartRate) + (0.1263 * person.getWeight()) + (0.074 * person.getAge())) / 4.184) * 60 *
                 getExerciseTimeInHours(person.getStartExerciseDate());
     }

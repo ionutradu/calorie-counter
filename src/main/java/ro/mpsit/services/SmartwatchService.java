@@ -65,6 +65,21 @@ public class SmartwatchService {
         }
     }
 
+    public void stopExercise(String name) {
+        String deviceUri = String.format(SMARTWATCH_STOP_URL, pairedWatches.get(name));
+
+        URI uri = UriComponentsBuilder.fromHttpUrl(deviceUri)
+                .build().encode().toUri();
+
+        System.out.println("Requesting stopping to " + uri.toString());
+
+        try {
+            restTemplate.getForEntity(uri, String.class);
+        } catch (HttpServerErrorException | HttpClientErrorException e) {
+            System.out.println("Couldn't stop. " + e.getMessage());
+        }
+    }
+
     private String requestPairing(String name, String code) {
         String deviceUri = String.format(SMARTWATCH_PAIR_URL, waitingList.get(name));
 
@@ -88,7 +103,12 @@ public class SmartwatchService {
         return pairedWatches.entrySet().stream().map(Map.Entry::getKey).collect(Collectors.toList());
     }
 
+    public List<String> getWaitingWatches() {
+        return waitingList.entrySet().stream().map(Map.Entry::getKey).collect(Collectors.toList());
+    }
+
     public void unpair(String name) {
         pairedWatches.remove(name);
+        waitingList.remove(name);
     }
 }
