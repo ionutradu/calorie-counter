@@ -195,6 +195,7 @@ img.dropdown-image{
         <div> <button id="stop" onclick="stop()"/> Stop </div>
         <div id="calories" class="gauge"></div>
         <div id="time" class="gauge"></div>
+        <div id="heartRate" class="gauge"></div>
       </div>
       <br style="clear:both;"/> 
     </div>
@@ -202,6 +203,7 @@ img.dropdown-image{
 <script>
     var g1;
     var g2;
+    var g3;
 
     var name = "firstsmartwatch"
 
@@ -211,17 +213,38 @@ img.dropdown-image{
 
     var names = ["A", "B"]
 
-    var devices = ""
-
     var age, gender, weight, code, exerciseDuration;
 
     var interval;
 
-    names.forEach(function(entry) {
-      devices += "<div id=" + entry + " onclick=\"clicked(" + entry + ")\"><pre><font color=black>" + entry + "</pre></font></div>"
-    })
+    var updateListInterval = setInterval(update_smartwatches_list, 5000)
+    update_smartwatches_list()
 
-    $("#devices").html(devices)
+    jQuery.ajaxSetup({async:false});
+
+    function update_smartwatches_list() {
+      console.log("Updating smartwatches list")
+
+      devices = ""
+
+      $.get(server_url + "/waiting", function(data, status, xhr) {
+          data.forEach(function(entry) {
+            console.log("Adding " + entry)
+            devices += "<div id=" + entry + " onclick=\"clicked(" + entry + ")\"><pre><font color=black>" + entry + " (not paired)" + "</pre></font></div>"
+          })
+      }, "json");
+      console.log(devices)
+
+      $.get(server_url, function(data, status, xhr) {
+          data.forEach(function(entry) {
+            console.log("Adding " + entry)
+            devices += "<div id=" + entry + " onclick=\"clicked(" + entry + ")\"><pre><font color=black>" + entry + " (paired)" + "</pre></font></div>"
+          })
+      }, "json");
+      console.log(devices)
+
+      $("#devices").html(devices)
+    }
 
     function changeColorToSelected(obj) {
       $("#pair").show()
@@ -263,6 +286,17 @@ img.dropdown-image{
             title: "Sport time"
         });
 
+        heartRate = new JustGage({
+            id: "heartRate",
+            value: 0,
+            min: 50,
+            max: 120,
+            gaugeWidthScale: 0.2,
+            counter: true,
+            hideInnerShadow: true,
+            title: "Heart rate (bpm)"
+        });
+
         interval = setInterval(update_widgets, 1000)
     }
 
@@ -276,8 +310,10 @@ img.dropdown-image{
           console.log(data)
           console.log("cal:" + data["calories"])
           console.log("dur: " + data["exercisePercentage"])
+          console.log("hr: " + data["heartRate"])
           time.refresh(data["exercisePercentage"]);
           calories.refresh(data["calories"]);
+          heartRate.refresh(data["heartRate"]);
       }, "json");
     }
 
@@ -335,6 +371,8 @@ img.dropdown-image{
                 console.log(data)
             }
         }, "text");
+
+        clearInterval(updateListInterval);
       }
     }
 
@@ -359,6 +397,9 @@ img.dropdown-image{
                 console.log(data)
             }
         }, "text");
+
+        setInterval(update_smartwatches_list, 5000)
+        clearInterval(interval)
       }
     }
 
