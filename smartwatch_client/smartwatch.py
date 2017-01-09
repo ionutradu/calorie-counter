@@ -1,6 +1,7 @@
 import uuid
 import names
 import urllib
+import os
 
 from flask import Flask
 from flask import request, Response
@@ -14,11 +15,34 @@ server_address = "http://localhost:9023/api/smartwatch"
 
 code_length = 1
 
+running = True
+
+def change_heart_rate(heartRate, modify):
+	heartRate += modify
+
+	if heartRate < 80:
+		modify = 1
+	elif heartRate > 120:
+		modify = -2
+	elif heartRate > 110 and heartRate < 120:
+		modify = randint(-1, 1)
+	elif heartRate > 105:
+		modify = 0.2
+
+	print "Heartrate ", heartRate, " ", modify
+
+	return heartRate, modify
+
 def get_calories():
-	while True:
+	heartRate = 80
+	modify = 1
+
+	while running:
 		print "get calories"
-		make_request(server_address + "/updateCalories", {"heartRate": 80})
-		sleep(0.5)
+		make_request(server_address + "/updateCalories", {"heartRate": heartRate})
+		sleep(1)
+
+		heartRate, modify = change_heart_rate(heartRate, modify)
 
 t = Thread(target=get_calories)
 
@@ -53,32 +77,14 @@ def start():
 
 @app.route("/api/stop")
 def stop():
-	t.stop()
+	print "stopping.."
+	on_exit()
+	os._exit(1)
+	print "stopped.."
 	return Response(status=200)
 
 def ping_server():
 	make_request(server_address + "/ping", {})
-
-if __name__ == "__main__":
-	global name
-	global pair_code
-	global port
-
-	random = uuid.uuid4()
-	pair_code = str(random)[0:code_length].upper()
-	name = names.get_first_name()[0:code_length]
-	port = randint(9100, 9500)
-
-	# testing
-	name = "A"
-	pair_code = "A"
-
-	print "Pairing code:", pair_code
-	print "Smartwatch name:", name
-
-	ping_server()
-
-	app.run(port=port)
 
 def on_exit():
 	print "Unpaired from smartphone"
@@ -86,3 +92,30 @@ def on_exit():
 
 import atexit
 atexit.register(on_exit)
+
+import signal
+
+def handler(signum, frame):
+	print "Ctrl z"
+	on_exit()
+	sys.exit(1)
+
+if __name__ == "__main__":
+	global name
+	global pair_code
+	global port	
+	
+	random = uuid.uuid4()
+	pair_code = str(random)[0:code_length].upper()
+	name = names.get_first_name()[0:code_length]
+	port = randint(9100, 9500)
+
+	print "handler"
+	signal.signal(signal.SIGTSTP, handler)
+
+	print "Pairing code:", pair_code
+	print "Smartwatch name:", name
+
+	ping_server()
+
+	app.run(port=port)
