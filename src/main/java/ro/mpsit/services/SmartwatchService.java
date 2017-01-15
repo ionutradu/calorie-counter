@@ -75,7 +75,7 @@ public class SmartwatchService {
 
         try {
             restTemplate.getForEntity(uri, String.class);
-        } catch (HttpServerErrorException | HttpClientErrorException e) {
+        } catch (Exception e) {
             System.out.println("Couldn't stop. " + e.getMessage());
         }
     }

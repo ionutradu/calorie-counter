@@ -2,9 +2,11 @@ package ro.mpsit.services;
 
 import org.springframework.stereotype.Service;
 import ro.mpsit.web.ExerciseInformation;
+import ro.mpsit.web.ExerciseResults;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class CalorieCounterService {
@@ -44,8 +46,31 @@ public class CalorieCounterService {
         currentActivities.put(name, person);
     }
 
-    public void stopExercise(String name) {
-        currentActivities.remove(name);
+    public ExerciseResults stopExercise(String name) {
+        Person person = currentActivities.remove(name);
+        ExerciseResults exerciseResults = new ExerciseResults();
+
+        exerciseResults.setCalories(String.valueOf(person.getCalories()));
+
+        long exerciseTimeInMs = System.currentTimeMillis() - person.getStartExerciseDate();
+
+        exerciseResults.setCaloriesPerMinute(String.valueOf(person.getCalories() / (exerciseTimeInMs / 60000.0)));
+
+        String formattedExerciseTime = "";
+
+        if (TimeUnit.MILLISECONDS.toMinutes(exerciseTimeInMs) == 0) {
+            formattedExerciseTime += String.format("%2d seconds", TimeUnit.MILLISECONDS.toSeconds(exerciseTimeInMs));
+        } else {
+            formattedExerciseTime += String.format("%2d minutes, %2d seconds",
+                    TimeUnit.MILLISECONDS.toMinutes(exerciseTimeInMs),
+                    TimeUnit.MILLISECONDS.toSeconds(exerciseTimeInMs) -
+                            TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(exerciseTimeInMs)));
+        }
+
+        exerciseResults.setTime(formattedExerciseTime);
+        exerciseResults.setAverageHeartRate(String.valueOf(person.getAverageHeartRate()));
+
+        return exerciseResults;
     }
 
     public Double updateCalories(String name, Double heartRate) {
@@ -79,17 +104,21 @@ public class CalorieCounterService {
         Person person = currentActivities.get(name);
 
         ExerciseInformation exerciseInformation = new ExerciseInformation();
-        exerciseInformation.setCalories(String.valueOf(person.getCalories() + 2.0));
-        exerciseInformation.setExercisePercentage(getPercentage(person));
+        exerciseInformation.setCalories(String.valueOf(person.getCalories()));
+        exerciseInformation.setExercisePercentage(String.valueOf(getPercentage(person)));
         exerciseInformation.setHeartRate(String.valueOf(person.getHeartRate()));
+
+        if (100d - getPercentage(person) < -0.4d) {
+            return null;
+        }
 
         return exerciseInformation;
     }
 
-    private String getPercentage(Person person) {
+    private Double getPercentage(Person person) {
         double exerciseTimeInMs = (System.currentTimeMillis() - person.getStartExerciseDate()) * 1.0;
         double percentage = exerciseTimeInMs / person.getExerciseDurationInMs();
-        return String.valueOf((percentage * 10000 / 100));
+        return percentage * 10000 / 100;
     }
 
     private Double getMaleCalories(Double heartRate, Person person) {
