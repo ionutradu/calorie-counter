@@ -1,14 +1,17 @@
-<html><head>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<html>
+<head>
+  	<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/themes/smoothness/jquery-ui.css" />
+  	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="raphael-2.1.4.min.js"></script>
     <script src="justgage.js"></script>
-    <base href="http://bootstrapstudio.io/demo/" bs-system-element="" bs-hidden=""> 
-                <meta charset="utf-8">
-                <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Main page</title><link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-            <style bs-system-element="">.custom-header{
+    <base href="http://bootstrapstudio.io/demo/" bs-system-element="" bs-hidden="">
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main page</title>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <style bs-system-element="">.custom-header{
   background:#292c2f;
   padding:20px 40px;
   box-sizing:border-box;
@@ -131,79 +134,136 @@ img.dropdown-image{
     max-height: 1000px;
 }
 
-</style>
-<style bs-system-element="" bs-hidden=""></style>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Cookie">
+.gauge {
+    display: inline-block;
+}
+
+
+    </style>
+    <style bs-system-element="" bs-hidden=""></style>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Cookie">
 </head>
 <body>
-   <nav class="navbar navbar-default custom-header">
-      <div class="container-fluid">
-         <div class="navbar-header">
+<nav class="navbar navbar-default custom-header">
+    <div class="container-fluid">
+        <div class="navbar-header">
             <a href="#" class="navbar-brand navbar-link">
-               <inline-character class="space"> </inline-character>
+                <inline-character class="space"></inline-character>
             </a>
-         </div>
-         <div class="collapse navbar-collapse" id="navbar-collapse">
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-collapse">
             <ul class="nav navbar-nav links">
-               <li id="history" role="presentation">
-                  <a>
-                     <inline-character>Home</inline-character>
-                  </a>
-               </li>
-               <li role="presentation">
-                  <a href="#" class="hidden">
-                     <inline-character class="space"> </inline-character>
-                  </a>
-               </li>
-               <li role="presentation">
-                  <a href="#" class="hidden custom-navbar">
-                     <inline-character class="space"> </inline-character>
-                  </a>
-               </li>
+                <li id="history" role="presentation">
+                    <a>
+                        <inline-character>Home</inline-character>
+                    </a>
+                </li>
+                <li role="presentation">
+                    <a href="#" class="hidden">
+                        <inline-character class="space"></inline-character>
+                    </a>
+                </li>
+                <li role="presentation">
+                    <a href="#" class="hidden custom-navbar">
+                        <inline-character class="space"></inline-character>
+                    </a>
+                </li>
             </ul>
-         </div>
-      </div>
-   </nav>
-   
-    <br>
+        </div>
+    </div>
+</nav>
 
-    <div id="page" style="width: 100%">
-      <div id="left1" align="left" style="width: 20%; float:left">
+<br>
+
+<div id="page" style="width: 100%">
+    <div id="left1" align="left" style="width: 20%; float:left">
         <form id="person">
-          <label for="weight">Weight</label>
-          <input type="text" name="weight" id="weight" value="65"><br>
-          <label for="age">Age</label>
-          <input type="text" name="age" id="age" value="25"><br>
-          <label for="exerciseDuration">Exercise duration in minutes</label>
-          <input type="text" name="exerciseDuration" id="exerciseDuration" value="5"><br>
-          <label for="male">Male</label>
-          <input type="radio" name="gender" id="male" value="male" checked="checked">
-          <label for="female">Female</label>
-          <input type="radio" name="gender" id="female" value="female"><br>
-          <label for="code">Code</label>
-          <input type="text" name="code" id="code" value="A" required><br>
+            <label for="weight">Weight </label>
+            <input type="text" name="weight" id="weight" value="65" width="30"><br>
+            <label for="age">Age </label>
+            <input type="text" name="age" id="age" value="25"><br>
+            <label for="exerciseDuration">Exercise time (min) </label>
+            <input type="text" name="exerciseDuration" id="exerciseDuration" value="5"><br>
+            <label for="male"> Male </label>
+            <input type="radio" name="gender" id="male" value="male" checked="checked">
+            <label for="female"> Female </label>
+            <input type="radio" name="gender" id="female" value="female"><br>
+            <label for="code">Code </label>
+            <input type="text" name="code" id="code" value="A" required><br>
         </form>
 
         Devices: <br>
 
         <div id="devices" class="pre-scrollable" align="left" style="width: 70%"></div>
-      </div>
-
-      <div id="right" align="left" style="width: 80%; float:right">
-        <div> <button id="pair" onclick="pair()"/> Pair </div>
-        <div> <button id="start" onclick="start()"/> Start </div>
-        <div> <button id="stop" onclick="stop()"/> Stop </div>
-        <div id="calories" class="gauge"></div>
-        <div id="time" class="gauge"></div>
-        <div id="heartRate" class="gauge"></div>
-      </div>
-      <br style="clear:both;"/> 
     </div>
+
+    <div id="right" align="left" style="width: 80%; float:right">
+        <div>
+            <button id="pair" onclick="pair()"/>
+            Pair
+        </div>
+        <div>
+            <button id="start" onclick="start()"/>
+            Start
+        </div>
+        <div>
+            <button id="stop" onclick="stop()"/>
+            Stop
+        </div>
+        <div>
+		    <div id="calories" class="gauge"></div>
+		    <div id="time" class="gauge"></div>
+		    <div id="heartRate" class="gauge"></div>
+        </div>
+    </div>
+    <br style="clear:both;"/>
+</div>
+
+<div id="results" title="Exercise results">
+    <p id="p1">Calories: </p>
+    <p id="p2">Time: </p>
+    <p id="p3">Calories per minute: </p>
+    <p id="p4">Average heart rate: </p>
+</div>
 
 <script>
     var g1;
     var g2;
     var g3;
+
+calories = new JustGage({
+    id: "calories",
+    value: 0,
+    min: 0,
+    max: 500,
+    gaugeWidthScale: 0.5,
+    counter: true,
+    hideInnerShadow: true,
+    title: "Calories"
+});
+
+time = new JustGage({
+    id: "time",
+    value: 0,
+    min: 0,
+    max: 100,
+    symbol: '%',
+    gaugeWidthScale: 0.5,
+    counter: true,
+    hideInnerShadow: true,
+    title: "Sport time"
+});
+
+heartRate = new JustGage({
+    id: "heartRate",
+    value: 0,
+    min: 50,
+    max: 120,
+    gaugeWidthScale: 0.5,
+    counter: true,
+    hideInnerShadow: true,
+    title: "Heart rate (bpm)"
+});
 
     var name = "firstsmartwatch"
 
@@ -211,19 +271,24 @@ img.dropdown-image{
 
     var selected = null
 
-    var names = ["A", "B"]
-
     var age, gender, weight, code, exerciseDuration;
 
     var interval;
 
-    var updateListInterval = setInterval(update_smartwatches_list, 5000)
+    var updateListInterval = setInterval(update_smartwatches_list, 500)
     update_smartwatches_list()
+
+    $("#results").hide()
+    $("#pair").hide()
+    $("#start").hide()
+    $("#stop").hide()
+    // hide_widgets()
 
     jQuery.ajaxSetup({async:false});
 
     function update_smartwatches_list() {
       console.log("Updating smartwatches list")
+      console.log(selected)
 
       devices = ""
 
@@ -244,11 +309,27 @@ img.dropdown-image{
       console.log(devices)
 
       $("#devices").html(devices)
+
+      if (selected != null) {
+      	console.log("changing color to selected" + selected.id)
+      	changeColorToSelectedById(selected.id)
+      }
+    }
+
+    function changeColorToSelectedById(id) {
+      $.each( $('#devices'), function(i, left) {
+         $('div', left).each(function() {
+            html = $(this).html()
+            $(this).html(html.replace("green", "black"))
+
+            if ($(this).attr('id').includes(id)) {
+	            $(this).html(html.replace("black", "green"))
+            }
+         });
+      })
     }
 
     function changeColorToSelected(obj) {
-      $("#pair").show()
-
       $.each( $('#devices'), function(i, left) {
          $('div', left).each(function() {
             html = $(this).html()
@@ -261,60 +342,57 @@ img.dropdown-image{
       selected = obj
     }
 
+    function show_results(data) {
+    	data = JSON.parse(data)
+    	console.log(data)
+    	console.log("Calories: " + data["calories"])
+    	console.log("Time: " + data["time"])
+    	console.log("Calories per minute: " + data["caloriesPerMinute"])
+    	console.log("Average heart rate: " + data["averageHeartRate"])
+
+    	var val1 = parseFloat(data["calories"]).toFixed(2)
+    	var val2 = data["time"]
+    	var val3 = parseFloat(data["caloriesPerMinute"]).toFixed(2)
+    	var val4 = parseFloat(data["averageHeartRate"]).toFixed(2)
+    	$("#p1").html("Calories: " + val1)
+    	$("#p2").html("Time: " + val2)
+    	$("#p3").html("Calories per minute: " + val3)
+    	$("#p4").html("Average heart rate: " + val4)
+
+		$("#results").dialog();
+    }
+
+    function hide_widgets() {
+    	$("#calories").hide()
+    	$("#time").hide()
+    	$("#heartRate").hide()
+    }
+
     function show_widgets() {
-        calories = new JustGage({
-            id: "calories",
-            value: 0,
-            min: 0,
-            max: 2000,
-            gaugeWidthScale: 0.2,
-            counter: true,
-            hideInnerShadow: true,
-            title: "Calories"
-        });
-
-        time = new JustGage({
-            id: "time",
-            value: 0,
-            min: 0,
-            max: 100,
-            symbol: '%',
-            donut: true,
-            gaugeWidthScale: 0.2,
-            counter: true,
-            hideInnerShadow: true,
-            title: "Sport time"
-        });
-
-        heartRate = new JustGage({
-            id: "heartRate",
-            value: 0,
-            min: 50,
-            max: 120,
-            gaugeWidthScale: 0.2,
-            counter: true,
-            hideInnerShadow: true,
-            title: "Heart rate (bpm)"
-        });
-
+    	$("#calories").show()
+    	$("#time").show()
+    	$("#heartRate").show()
         interval = setInterval(update_widgets, 1000)
     }
 
     function update_widgets() {
-      var url = server_url.concat("/calories?")
-                .concat("name=").concat(selected.id);
+		var url = server_url.concat("/calories?")
+			.concat("name=").concat(selected.id);
 
-      console.log(url)
+		console.log(url)
 
-      $.get(url, function(data, status, xhr) {
-          console.log(data)
-          console.log("cal:" + data["calories"])
-          console.log("dur: " + data["exercisePercentage"])
-          console.log("hr: " + data["heartRate"])
-          time.refresh(data["exercisePercentage"]);
-          calories.refresh(data["calories"]);
-          heartRate.refresh(data["heartRate"]);
-      }, "json");
+		$.get(url, function(data, status, xhr) {
+			console.log(data)
+			console.log("cal:" + data["calories"])
+			console.log("dur: " + data["exercisePercentage"])
+			console.log("hr: " + data["heartRate"])
+			time.refresh(data["exercisePercentage"]);
+			calories.refresh(data["calories"]);
+			heartRate.refresh(data["heartRate"]);
+		}, "json")
+		.fail(function() {
+			stop()
+		});
     }
 
     function pair() {
@@ -337,10 +415,15 @@ img.dropdown-image{
                 // warn
                 console.log("Successful pairing")
                 $("#pair").hide()
+                alert("Pairing with " + selected.id + " successful")
             } else {
                 console.log(data)
+                alert("Error: " + data)
             }
-        }, "text");
+        }, "text")
+        .fail(function(e) {
+            alert("Error: " + e.responseText)
+        });
       }
     }
 
@@ -363,14 +446,19 @@ img.dropdown-image{
             if (data.localeCompare("ok") == 0) {
                 // warn
                 console.log("Successful starting")
+                alert("Starting exercise")
                 $("#pair").hide()
+                $("#start").hide()
 
                 show_widgets()
 
             } else {
                 console.log(data)
             }
-        }, "text");
+        }, "text")
+        .fail(function(e) {
+            alert("Error: " + e.responseText)
+        });
 
         clearInterval(updateListInterval);
       }
@@ -387,36 +475,44 @@ img.dropdown-image{
         console.log(url)
 
         $.get(url, function(data, status, xhr) {
-            console.log(data)
+            console.log("Received results: " + data)
+            show_results(data)
 
-            if (data.localeCompare("ok") == 0) {
-                // warn
-                console.log("Successful stopping")
-                clearInterval(interval)
-            } else {
-                console.log(data)
-            }
-        }, "text");
+            console.log("Successful stopping")
+            $("#pair").show()
+            $("#start").show()
+            clearInterval(interval)
+        }, "text")
+        .fail(function() {
+        	alert("Error stopping")
+        })
 
-        setInterval(update_smartwatches_list, 5000)
+        setInterval(update_smartwatches_list, 1000)
         clearInterval(interval)
+		time.refresh(0);
+		calories.refresh(0);
+		heartRate.refresh(0);
       }
     }
 
     function clicked(obj) {
-      var isValid = validateForm()
+		var isValid = validateForm()
 
-      if (!isValid) {
-        return;
-      }
+		if (!isValid) {
+		return;
+		}
 
-      age = document.forms["person"]["age"].value;
-      gender = document.forms["person"]["gender"].value;
-      weight = document.forms["person"]["weight"].value;
-      code = document.forms["person"]["code"].value;
-      exerciseDuration = document.forms["person"]["exerciseDuration"].value;
+    	age = document.forms["person"]["age"].value;
+    	gender = document.forms["person"]["gender"].value;
+    	weight = document.forms["person"]["weight"].value;
+    	code = document.forms["person"]["code"].value;
+    	exerciseDuration = document.forms["person"]["exerciseDuration"].value;
 
-      changeColorToSelected(obj)
+ 		$("#pair").show()
+    	$("#start").show()
+   		$("#stop").show()
+
+      	changeColorToSelected(obj)
     }
 
     function validateForm() {
@@ -465,6 +561,7 @@ img.dropdown-image{
 
         return valid && checked;
     }
+
 </script>
 
 </body>
