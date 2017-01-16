@@ -16,24 +16,6 @@ public class CalorieCounterService {
     private static final int HOUR_IN_MS = 60 * 60 * 1000;
 
 
-//    @PostConstruct
-    public void init() throws InterruptedException {
-        Person person = new Person();
-        person.setAge(23);
-        person.setWeight(60);
-        person.setMale(true);
-        person.setStartExerciseDate(System.currentTimeMillis());
-
-        currentActivities.put("test", person);
-
-        int heartRate = 80;
-        while (true) {
-            System.out.println(updateCalories("test", heartRate * 1.0));
-            Thread.sleep(5000);
-        }
-
-    }
-
     public void startExercise(String name, Integer age, Integer weight, Boolean isMale, Integer exerciseDurationInMinutes) {
         Person person = new Person();
         person.setAge(age);
