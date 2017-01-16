@@ -178,21 +178,22 @@ img.dropdown-image{
 <div id="page" style="width: 100%">
     <div id="left1" align="left" style="width: 20%; float:left">
         <form id="person">
-            <label for="weight">Weight </label>
-            <input type="text" name="weight" id="weight" value="65" width="30"><br>
-            <label for="age">Age </label>
-            <input type="text" name="age" id="age" value="25"><br>
-            <label for="exerciseDuration">Exercise time (min) </label>
-            <input type="text" name="exerciseDuration" id="exerciseDuration" value="5"><br>
+            <label for="weight">Weight </label> <br>
+            <input type="text" name="weight" id="weight" value="65" width="30"><br><br>
+            <label for="age">Age </label><br>
+            <input type="text" name="age" id="age" value="25"><br><br>
+            <label for="exerciseDuration">Exercise time (min) </label><br>
+            <input type="text" name="exerciseDuration" id="exerciseDuration" value="5"><br><br>
+            <label for="sex">Sex </label> <br>
             <label for="male"> Male </label>
             <input type="radio" name="gender" id="male" value="male" checked="checked">
             <label for="female"> Female </label>
-            <input type="radio" name="gender" id="female" value="female"><br>
-            <label for="code">Code </label>
+            <input type="radio" name="gender" id="female" value="female"><br><br>
+            <label for="code"> Pairing code </label><br>
             <input type="text" name="code" id="code" value="A" required><br>
         </form>
 
-        Devices: <br>
+        Devices nearby: <br>
 
         <div id="devices" class="pre-scrollable" align="left" style="width: 70%"></div>
     </div>
@@ -282,7 +283,6 @@ heartRate = new JustGage({
     $("#pair").hide()
     $("#start").hide()
     $("#stop").hide()
-    // hide_widgets()
 
     jQuery.ajaxSetup({async:false});
 
@@ -292,20 +292,20 @@ heartRate = new JustGage({
 
       devices = ""
 
-      $.get(server_url + "/waiting", function(data, status, xhr) {
-          data.forEach(function(entry) {
-            console.log("Adding " + entry)
-            devices += "<div id=" + entry + " onclick=\"clicked(" + entry + ")\"><pre><font color=black>" + entry + " (not paired)" + "</pre></font></div>"
-          })
-      }, "json");
-      console.log(devices)
-
       $.get(server_url, function(data, status, xhr) {
           data.forEach(function(entry) {
             console.log("Adding " + entry)
             devices += "<div id=" + entry + " onclick=\"clicked(" + entry + ")\"><pre><font color=black>" + entry + " (paired)" + "</pre></font></div>"
           })
       }, "json");
+
+      $.get(server_url + "/waiting", function(data, status, xhr) {
+          data.forEach(function(entry) {
+            console.log("Adding " + entry)
+            devices += "<div id=" + entry + " onclick=\"clicked(" + entry + ")\"><pre><font color=black>" + entry + " (not paired)" + "</pre></font></div>"
+          })
+      }, "json");
+
       console.log(devices)
 
       $("#devices").html(devices)
