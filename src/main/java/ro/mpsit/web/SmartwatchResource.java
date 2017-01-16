@@ -78,6 +78,11 @@ public class SmartwatchResource {
         }
 
         ExerciseResults exerciseResults = calorieCounterService.stopExercise(name);
+
+        if (exerciseResults == null) {
+            return ResponseEntity.badRequest().body(null);
+        }
+
         smartwatchService.stopExercise(name);
 
         return new ResponseEntity<>(exerciseResults, HttpStatus.OK);

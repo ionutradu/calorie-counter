@@ -13,7 +13,7 @@ app = Flask(__name__)
 
 server_address = "http://localhost:9023/api/smartwatch"
 
-code_length = 1
+code_length = 1000
 
 running = True
 
@@ -106,8 +106,8 @@ if __name__ == "__main__":
 	global port	
 	
 	random = uuid.uuid4()
-	pair_code = str(random)[0:code_length].upper()
-	name = names.get_first_name()[0:code_length]
+	pair_code = str(random)[0:6].upper()
+	name = names.get_first_name()
 	port = randint(9100, 9500)
 
 	print "handler"

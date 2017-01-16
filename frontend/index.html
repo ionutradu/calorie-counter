@@ -484,7 +484,7 @@ heartRate = new JustGage({
             clearInterval(interval)
         }, "text")
         .fail(function() {
-        	alert("Error stopping")
+        	alert("Error stopping, the exercise has not started yet.")
         })
 
         setInterval(update_smartwatches_list, 1000)

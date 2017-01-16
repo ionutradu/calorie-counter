@@ -29,6 +29,10 @@ public class CalorieCounterService {
     }
 
     public ExerciseResults stopExercise(String name) {
+        if (!currentActivities.containsKey(name)) {
+            return null;
+        }
+
         Person person = currentActivities.remove(name);
         ExerciseResults exerciseResults = new ExerciseResults();
 
