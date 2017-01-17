@@ -7,8 +7,9 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import ro.mpsit.dto.ExerciseInformation;
+import ro.mpsit.dto.ExerciseResults;
 import ro.mpsit.services.CalorieCounterService;
-import ro.mpsit.services.Person;
 import ro.mpsit.services.SmartwatchService;
 
 import java.util.List;

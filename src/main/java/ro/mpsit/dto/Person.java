@@ -1,4 +1,4 @@
-package ro.mpsit.services;
+package ro.mpsit.dto;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

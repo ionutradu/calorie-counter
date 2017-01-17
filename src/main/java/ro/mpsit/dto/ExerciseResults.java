@@ -1,4 +1,4 @@
-package ro.mpsit.web;
+package ro.mpsit.dto;
 
 public class ExerciseResults {
 

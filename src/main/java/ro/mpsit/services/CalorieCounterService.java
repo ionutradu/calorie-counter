@@ -1,8 +1,9 @@
 package ro.mpsit.services;
 
 import org.springframework.stereotype.Service;
-import ro.mpsit.web.ExerciseInformation;
-import ro.mpsit.web.ExerciseResults;
+import ro.mpsit.dto.ExerciseInformation;
+import ro.mpsit.dto.ExerciseResults;
+import ro.mpsit.dto.Person;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
